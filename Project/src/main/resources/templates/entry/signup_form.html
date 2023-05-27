@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sign Up - CodeJava</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center" style="height: 100vh">
+        <div>
+            <h1>Customer Registration - Sign Up</h1>
+        </div>
+        <form th:action="@{register/process_register}" th:object="${customer}"
+            method="post" style="max-width: 600px; margin: 0 auto;">
+        <div class="m-3">
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Customer ID (email): </label>
+                <div class="col-8">
+                    <input type="email" th:field="*{customer_id}" class="form-control" required />
+                </div>
+            </div>
+             
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Password: </label>
+                <div class="col-8">
+                    <input type="password" th:field="*{password_hash}" class="form-control"
+                            required minlength="5" maxlength="32"/>
+                </div>
+            </div>
+             
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Address: </label>
+                <div class="col-8">
+                    <input type="text" th:field="*{address}" class="form-control"
+                            required minlength="2" maxlength="50"/>
+                </div>
+            </div>
+             
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Property Type: </label>
+                <select type="text" th:field="*{property_type}" class="form-control" id="property_type"> 
+      				<option th:each="p : ${listPTypes}" th:value="${p}" th:text="${p}" />
+    			</select>
+            </div>
+             
+             <div class="form-group row">
+                <label class="col-4 col-form-label">Bedroom Number: </label>
+                <select type="int" th:field="*{bedroom_num}" class="form-control" id="bedroom_num">
+      				<option th:each="x : ${listNumB}" th:value="${x}" th:text="${x}" />
+    			</select>
+            </div>
+             
+            <div>
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <button class="btn btn-secondary" action="action" onclick="window.history.go(-1); return false;" >Back</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</body>
+</html>

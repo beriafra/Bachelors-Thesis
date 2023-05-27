@@ -1,0 +1,18 @@
+# Get the official Python-based Docker image
+FROM python:3.8
+
+# Create a directory containing the application code
+WORKDIR /app
+
+# requirements.txt dosyasını kopyalayın
+COPY requirements.txt .
+
+# Install required packages
+RUN pip install --upgrade pip
+RUN pip install  -r requirements.txt
+
+# Copy the application code
+COPY . .
+
+# Run the Flask-Dash application
+CMD ["python", "app.py", "--port=5000", "--host=0.0.0.0"]

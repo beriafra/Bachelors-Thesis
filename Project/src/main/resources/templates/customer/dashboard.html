@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Welcome to iGSE Dashboard</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+        
+            <!-- jQuery and Bootstrap JavaScript -->
+    	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    	<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.16.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>-->
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        
+        <!--<script>
+		  function changeDateFormat() {
+		    var input = document.getElementById('inputDate');
+		    var date = new Date(input.value);
+		    var year = date.getFullYear();
+		    var month = ('0' + (date.getMonth() + 1)).slice(-2);
+		    var day = ('0' + date.getDate()).slice(-2);
+		    input.value = year + '-' + month + '-' + day;
+		  }
+		</script>-->
+        
+        <!-- STYLE -->
+        <style>
+			#logoutForm {
+  				position: absolute;
+  				top: 85px;
+  				right: 500px;
+			}
+		</style>
+    </head>
+    
+    <!-- HTML -->
+    
+    <body>
+        <h1 class="text-center mt-3 mb-3">Customer Dashboard</h1>
+			<!-- Logout Modal -->
+			<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        Are you sure you want to logout?
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">CANCEL</button>
+			        <a href="/logout" class="btn btn-outline-danger">LOGOUT</a>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+
+	  <!-- Modal to add reading -->
+	  <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h5 class="modal-title" id="addItemModalLabel">Add Reading</h5>
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	            <span aria-hidden="true">&times;</span>
+	          </button>
+	        </div>
+	        <!-- Form for adding new item -->
+	        <div class="modal-body">
+	          <form th:action="@{/dashboard/processform}" th:object="${reading}" method="post">
+	            <div class="form-group">
+	              <label>Date</label><!--
+	              <input type="text" id="date" name="date" th:field="*{submission_date}" class="form-control"
+	              	pattern="\d{4}-\d{2}-\d{2}" placeholder="yyyy-mm-dd" required>-->
+	              	<input type="date" class="form-control" id="start-date" th:field="*{submission_date}" min="2022-01-01" required>
+	            </div>
+	            <div class="form-group">
+	              <label>Electricity Day Reading</label>
+	              <input type="number" th:field="*{elec_readings_day}" class="form-control" placeholder="Enter electricity day reading" required>
+	            </div>
+	            <div class="form-group">
+	              <label>Electricity Night Reading</label>
+	              <input type="number" th:field="*{elet_reading_night}" class="form-control" placeholder="Enter electricity night reading" required>
+	            </div>
+	            <div class="form-group">
+	              <label>Gas</label>
+	              <input type="number" th:field="*{gas_reading}" class="form-control" placeholder="Enter gas reading" required>
+	            </div>
+	            <button type="submit" class="btn btn-primary">Submit</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	          </form>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  
+	  <!-- Modal to add creadits -->
+	  <div class="modal fade" id="addCreditModal" tabindex="-1" role="dialog" aria-labelledby="addCreditModal" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	      <div class="modal-content">
+	        <div class="modal-header">
+	          <h5 class="modal-title" id="addCreditsModalLabel">Add Credits</h5>
+	          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	            <span aria-hidden="true">&times;</span>
+	          </button>
+	        </div>
+	        <!-- Form for adding credits -->
+	        <div class="modal-body">
+	          <form th:action="@{/dashboard/addcredits}" th:object="${voucher}" method="post">
+	            <div class="form-group">
+	              <label>Voucher Code</label>
+	              <input type="text" th:field="*{EVC_code}" class="form-control" placeholder="Enter Voucher Code" required>
+	            </div>
+	            <button type="submit" class="btn btn-primary">Submit</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	          </form>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+   	
+   	<br><br>
+    <div class="row">
+      <div class="col-3">
+        <div class="row">
+			
+		</div>
+      </div>
+      <div class="col-5">
+		  <!-- Table to display list of bills -->
+        <!-- Second section -->
+        <table class="table table-responsive">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Electricity-Day</th>
+              <th scope="col">Electricity-Night</th>
+              <th scope="col">Gas</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="reading : ${readings}">
+              <td th:text="${reading.submission_date}">Submission Date></td>
+              <td><a th:text="${reading.elec_readings_day}">Electricity Reading Day</a><a> kWh</a></td>
+              <td><a th:text="${reading.elet_reading_night}">Electricity Reading Night</a><a> kWh</a></td>
+              <td><a th:text="${reading.gas_reading}">Gas Reading</a><a> kWh</a></td>
+              <td><b><a th:text="${reading.status}">Status</a></b></td>
+              <td>
+				  <form th:unless="${reading.status} == 'paid'" th:action="@{/dashboard/pay}" th:object="${reading}" method="post">
+				  <input type="hidden" name="readingId" th:value="${reading.reading_id}"/>
+				  <button class="btn btn-outline-dark">PAY</button>
+				  </form>
+				  <span th:if="${reading.status} == 'paid'">
+					  <button class="btn btn-outline-dark disabled">PAID</button>
+				  </span>
+				  
+				  </td>
+				  <td>
+					  <form th:unless="${reading.status} == 'paid'" th:action="@{/dashboard/delete}" th:object="${reading}" method="post">
+					  <input type="hidden" name="readingId" th:value="${reading.reading_id}"/>
+					  <button class="btn btn-outline-danger">DELETE</button>
+					  </form>
+					  <span th:if="${reading.status} == 'paid'">
+						  <button class="btn btn-outline-danger disabled">DELETE</button>
+					  </span>
+				  </td>
+            </tr>
+            <div th:if="${deletedReadingMessage}">
+		    	<div class="alert alert-danger" style="width: 60%;" th:text="${deletedReadingMessage}"></div>
+		    </div>
+		    <div th:if="${readingSubmissionError}">
+		    	<div class="alert alert-danger" style="width: 60%;" th:text="${readingSubmissionError}"></div>
+		    </div>
+		    <div th:if="${readingSubmissionSuccess}">
+		    	<div class="alert alert-success" style="width: 60%;" th:text="${readingSubmissionSuccess}"></div>
+		    </div>
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Edit Reading Modal -->
+     
+
+      
+        <!-- Third section -->
+      
+			<div class="col-md-4">
+			    <a style="font-size: 1.5vw;">BALANCE: £</a>
+			    <a th:text="${customer.balance}" style="font-size: 1.5vw;">Customer Balance</a><br><br>
+			    <div th:if="${creditErrorMessage}">
+		            <div class="alert alert-danger" style="width: 40%;" th:text="${creditErrorMessage}"></div>
+		        </div>
+		        <div th:if="${creditSuccessMessage}">
+		            <div class="alert alert-success" style="width: 40%;" th:text="${creditSuccessMessage}"></div>
+		        </div>
+		        <div th:if="${paymentComplete}">
+		            <div class="alert alert-success" style="width: 40%;" th:text="${paymentComplete}"></div>
+		        </div>
+			  
+			  	<!-- Button to open add new reading modal -->
+				<button type="button" class="btn btn-success" data-toggle="modal" data-target="#addItemModal" 
+				  		style="width: 7vw; height: auto; font-size: 0.8vw; font-size: 0.8vw;">
+				 		Add Reading</button>
+			  	<br><br>
+				<!-- Button to add credit modal -->
+				<button type="submit" class="btn btn-primary" data-toggle="modal"
+						style="width: 7vw; height: auto; font-size: 0.8vw;" data-target="#addCreditModal"
+						>Add Credits</button>
+				<br><br>
+				<!-- Button to open logout modal -->
+				<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#logoutModal"
+						style="width: 7vw; height: auto; font-size: 0.8vw;">LOGOUT</button>
+				
+		  
+			</div>
+    
+    </div>
+    </body>    
+</html>

@@ -1,0 +1,41 @@
+version: '3'
+services:
+  igse-db:
+    image: mysql:latest
+    restart: always
+    container_name: ${MYSQL_HOST}
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./ny81.sql:/docker-entrypoint-initdb.d/ny81.sql
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  energy_bill_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: energy_bill_app
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    depends_on:
+      igse-db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://${MYSQL_HOST}:3306/igse
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USER}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+volumes:
+  db_data:

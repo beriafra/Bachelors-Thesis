@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
+<head>
+  <meta charset="UTF-8">
+  <title>ML API</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+
+</head>
+
+<body>
+ <div class="login">
+	<h1>Verizon Churn Analysis</h1>
+  <p>Objective: To predict if a user will cancel the subscription</p>
+  <p>Api Sunucu IP Adresi: {{ server_ip }}</p>
+  &nbsp;
+  <p>Upload a csv file and predict</p>
+     <!-- Main Input For Receiving Query to our ML -->
+     <form action = "{{ url_for('upload_predict')}}"method="post" enctype="multipart/form-data">
+      <input type="file" name="file">
+      <input type="submit" value="Upload">
+      {{ upload_prediction_text }}
+    </form>
+    &nbsp;
+    <p>Fill manually and predict</p>
+    <form action="{{ url_for('predict')}}"method="post">
+    	<input type="text" name="mon" placeholder="mon" required="required" />
+      <input type="text" name="state" placeholder="state" required="required" />
+		  <input type="text" name="originalagency" placeholder="originalagency" required="required" />
+      <input type="text" name="speed" placeholder="speed" required="required" />
+      <input type="text" name="wirecenter" placeholder="wirecenter" required="required" />
+		  <input type="text" name="InstallType" placeholder="InstallType" required="required" />
+      <input type="text" name="competitorname" placeholder="competitorname" required="required" />
+      <input type="text" name="ContractType" placeholder="ContractType" required="required" />
+		  <input type="text" name="salesrepid" placeholder="salesrepid" required="required" />
+      <input type="text" name="order_create_date" placeholder="order_create_date" required="required" />
+      <input type="text" name="canceldate" placeholder="canceldate" required="required" />
+		  <input type="text" name="endclientsystem" placeholder="endclientsystem" required="required" />
+      <input type="text" name="hfws_ind" placeholder="hfws_ind" required="required" />
+      <input type="text" name="due_date" placeholder="due_date" required="required" />
+		  <input type="text" name="FIRSTOFFEREDDATE" placeholder="FIRSTOFFEREDDATE" required="required" />
+      <input type="text" name="waitingdayofcustomers" placeholder="waitingdayofcustomers" required="required" />
+      <input type="text" name="waitingdayforcompany" placeholder="waitingdayforcompany" required="required" />
+		  <input type="text" name="BUNDLE" placeholder="BUNDLE" required="required" /> 
+      <input type="text" name="BundleType" placeholder="BundleType" required="required" />
+      <input type="text" name="ONTRequired" placeholder="ONTRequired" required="required" />
+		  <input type="text" name="ONTInstall" placeholder="ONTInstall" required="required" />
+      <input type="text" name="strOrderType" placeholder="strOrderType" required="required" />
+      <input type="text" name="strIsWinbackIndicator" placeholder="strIsWinbackIndicator" required="required" />
+		  <input type="text" name="notruckrollrequiredreason" placeholder="notruckrollrequiredreason" required="required" />
+      <input type="text" name="droptype" placeholder="droptype" required="required" />
+      <input type="text" name="premisetype" placeholder="premisetype" required="required" />
+      <input type="text" name="ONTselfinstallcapable" placeholder="ONTselfinstallcapable" required="required" />
+		  <input type="text" name="saleschannel" placeholder="saleschannel" required="required" /> 
+      <input type="text" name="bundlename" placeholder="bundlename" required="required" />
+      <input type="text" name="smartcart" placeholder="smartcart" required="required" />
+        <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+   <br>
+   <br>
+   {{ prediction_text }}
+   &nbsp;
+   <form action="{{ url_for('show_table')}}"method="post">
+    <button type="submit" class="btn btn-primary btn-block btn-large"formnovalidate="formnovalidate">Show Example Table</button>
+  </form>
+  <div>
+    <table align="left">
+      <!-- Table content goes here -->
+      &nbsp;
+      {{ table | safe }}
+      &nbsp;
+    </table>
+  </div>
+ </div>
+</body>
+</html>

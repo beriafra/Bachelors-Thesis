@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Welcome to iGSE Dashboard</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+        
+            <!-- jQuery and Bootstrap JavaScript -->
+    	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    	<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.16.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>-->
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        
+        <!-- STYLE -->
+        <style>
+			#logoutForm {
+  				position: absolute;
+  				top: 85px;
+  				right: 500px;
+			}
+		</style>
+    </head>
+    
+    <!-- HTML -->
+    
+    <body>
+        <h1 class="text-center mt-3 mb-3">Admin Dashboard</h1>
+			<!-- Logout Modal -->
+			<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        Are you sure you want to logout?
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">CANCEL</button>
+			        <a href="/logout" class="btn btn-outline-danger">LOGOUT</a>
+			      </div>
+			    </div>
+			  </div>
+			</div>
+	  
+   	<br><br>
+    <div class="row">
+      <div class="col-4">
+        <div class="row">
+			
+		</div>
+      </div>
+      <div class="col-4">
+        <!-- second section -->
+        <div th:if="${errorFindingTaiff}">
+			<div class="alert alert-danger" style="width: 40%;" th:text="${errorFindingTaiff}"></div>
+		</div>
+        <form th:action="@{/dashboardadmin/updatetaiff}" th:object="${taiff}" method="post">
+			<label th:text="${taiffnames}" class="form-control"></label>
+			<input type="hidden" name="taiffname" th:value="${taiffname}"/>
+			<input name="rate" type="number" step=".01" th:field="*{rate}" class="form-control" required/><br>
+			<input type="submit" value="CHANGE RATE" style="position: relative; width: 7vw; height: auto; font-size: 
+				0.8vw;" class="btn btn-primary"/>
+		</form><br>
+		
+      </div>    
+        <!-- third section -->
+     <div class="col-4">
+				<!-- Button to open logout modal -->
+				<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#logoutModal"
+						style="width: 7vw; height: auto; font-size: 0.8vw;">LOGOUT</button><br><br>
+				<a href="/dashboardadmin">
+					<button class="btn btn-outline-dark mt-auto" style="position: relative; 
+	        			width: 7vw; height: auto; font-size: 0.8vw;">BACK</button>
+		  		</a>
+			</div>
+    
+    </div>
+    </body>    
+</html>

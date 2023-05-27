@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8">
+    	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Pay Bills</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+        
+            <!-- jQuery and Bootstrap JavaScript -->
+    	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    	<!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.16.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>-->
+    	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </head>
+    <body>
+		    <!-- Main title -->
+	    <h1 class="text-center mt-5">Pay Bill ID:</h1>
+	    <h1 class="text-center" th:text="${reading.reading_id}">Reading ID:</h1>
+	
+	    <!-- Page content -->
+	    <div class="container" th:object="${reading}">
+	      <div class="row">
+	        <!-- First section -->
+	        <div class="col-md-8">
+				<table class="table table-responsive">
+					<thead>
+			            <tr>
+			           		<th></th>
+			           		<th>READINGS</th>
+			           		<th>PREVIOUS READING</th>
+			           		<th>RATES</th>
+			           		<th>CALCULATION</th>
+			            </tr>
+			        </thead>
+					<tbody>
+						<tr>
+			          		<td>Reading Date:  </td>
+			          		<td><b><a th:text="${reading.submission_date}"></a></b></td>
+			          		<td><b><a th:text="${preReading.submission_date}"></a></b></td>
+			          		<td><a th:text="${STaiff}"></a></td>
+			          		<td><a th:text="${days}"></a> * <a th:text="${STaiff}"></a> = <a th:text="${rc}"></a></td>
+			          	</tr>
+			          	<tr>
+							<td>Electricity Day Reading:  </td>
+							<td><b><a th:text="${reading.elec_readings_day}"></a><a> kWh</a></b></td>
+							<td><b><a th:text="${preReading.elec_readings_day}"></a><a> kWh</a></b></td>
+							<td><a th:text="${EDTaiff}"></a></td>
+							<td>(<a th:text="${reading.elec_readings_day}"></a> - <a th:text="${preReading.elec_readings_day}">
+								</a>) * <a th:text="${EDTaiff}"></a> = <a th:text="${edc}"></a></td>
+						</tr>
+						<tr>
+							<td>Electricity Night Reading:  </td>
+							<td><b><a th:text="${reading.elet_reading_night}"></a><a> kWh</a></b></td>
+							<td><b><a th:text="${preReading.elet_reading_night}"></a><a> kWh</a></b></td>
+							<td><a th:text="${ENTaiff}"></a></td>
+							<td>(<a th:text="${reading.elet_reading_night}"></a> - <a th:text="${preReading.elet_reading_night}">
+								</a>) * <a th:text="${ENTaiff}"></a> = <a th:text="${enc}"></a></td>
+						</tr>
+						<tr>
+							<td>Gas Reading:  </td>
+							<td><b><a th:text="${reading.gas_reading}"></a><a> kWh</a></b></td>
+							<td><b><a th:text="${preReading.gas_reading}"></a><a> kWh</a></b></td>
+							<td><a th:text="${GTaiff}"></a></td>
+							<td>(<a th:text="${reading.gas_reading}"></a> - <a th:text="${preReading.gas_reading}">
+								</a>) * <a th:text="${GTaiff}"></a> = <a th:text="${gc}"></a></td>
+						</tr>
+						<tr>
+							<td>Total:	</td>
+							<td></td>
+							<td></td>
+							<td></td>
+							<td><a th:text="${edc}"></a> + <a th:text="${enc}"></a> + <a th:text="${gc}">
+								</a> + <a th:text="${rc}"></a> = <a th:text="${total}">Total</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<a>Status:  </a><mark><b><a th:text="${reading.status}"></a></b></mark>
+	        </div>
+	        <!-- Second section -->
+	        <div class="col-md-4">
+				<a style="font-size: 1.5vw;">BALANCE: £</a>
+			    <a th:text="${customer.balance}" style="font-size: 2vw;">Customer Balance</a><br><br>
+		        <div th:if="${paymentError}">
+		            <div class="alert alert-danger" style="width: 40%;" th:text="${paymentError}"></div>
+		        </div>
+			    	<span th:if="${reading.status} == 'paid'">
+						<button class="btn btn-outline-success mt-auto disabled" style="position: relative; 
+		        			width: 7vw; height: auto; font-size: 0.8vw;">PAY</button></span>
+        			<form th:unless="${reading.status} == 'paid'" th:action="@{/dashboard/payconfirm}" th:object="${reading}" method="post">
+						<input type="hidden" name="readingId" th:value="${reading.reading_id}" />
+						<button class="btn btn-outline-success mt-auto"style="position: relative; width: 7vw; 
+							height: auto; font-size: 0.8vw;">PAY</button>
+							</form><br>
+					<span th:if="${reading.status} == 'paid'">
+						<button class="btn btn-outline-danger mt-auto disabled" style="position: relative; 
+		        			width: 7vw; height: auto; font-size: 0.8vw;">DELETE</button></span>
+        			<form th:unless="${reading.status} == 'paid'" th:action="@{/dashboard/delete}" th:object="${reading}" method="post">
+						  <input type="hidden" name="readingId" th:value="${reading.reading_id}" />
+						  <button class="btn btn-outline-danger" style="position: relative; 
+		        			width: 7vw; height: auto; font-size: 0.8vw;">DELETE</button>
+						  </form><br>
+	          	<button class="btn btn-outline-dark mt-auto" onclick="window.history.back()" style="position: relative; 
+        			width: 7vw; height: auto; font-size: 0.8vw;">BACK</button>
+	        </div>
+	      </div>
+	    </div>
+  </body>
+</html>
